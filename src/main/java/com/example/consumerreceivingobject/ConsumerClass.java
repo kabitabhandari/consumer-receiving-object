@@ -2,7 +2,6 @@ package com.example.consumerreceivingobject;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,7 @@ public class ConsumerClass {
     }
 
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-one.topic}",
-            containerFactory = "userKafkaListenerFactory")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-one.topic}")
     public void consumeJson(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
