@@ -4,10 +4,10 @@ server:
 spring:
   kafka:
     consumer:
-      consumer-one:
+      consumer-milktea:
         group-id: "milktea_id"
         topic: "milktea"
-      consumer-two:
+      consumer-greentea:
         group-id: "greentea_id"
         topic: "greentea"
       bootstrap-servers: "127.0.0.1:9092"

@@ -2,30 +2,27 @@ package com.example.consumerreceivingobject;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
 
 @Component
 @ConfigurationProperties(prefix = "spring.kafka.consumer")
 @Data
 public class ConsumerConfigurationProperties {
 
-    protected ConsumerTwo consumerTwo;
-    protected ConsumerOne consumerOne;
+    protected ConsumerGreentea consumerGreentea;
+    protected ConsumerMilktea consumerMilktea;
     protected String keyDeserializer;
     protected String valueDeserializer;
     protected String bootstrapServers;
 
     @Data
-    public static class ConsumerTwo{
+    public static class ConsumerGreentea {
         protected String groupId;
         protected String topic;
 
     }
     @Data
-    public static class ConsumerOne{
+    public static class ConsumerMilktea {
         protected String groupId;
         protected String topic;
 

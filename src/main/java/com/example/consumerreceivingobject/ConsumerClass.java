@@ -16,7 +16,7 @@ public class ConsumerClass {
     }
 
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-one.topic}")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-milktea.topic}")
     public void consumeUserDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
@@ -30,7 +30,7 @@ public class ConsumerClass {
 
     }
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-two.topic}")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-greentea.topic}")
     public void consumeEmployeeDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
