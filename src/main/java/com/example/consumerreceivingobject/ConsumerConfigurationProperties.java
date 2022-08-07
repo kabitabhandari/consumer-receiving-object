@@ -12,8 +12,8 @@ import javax.annotation.PostConstruct;
 @Data
 public class ConsumerConfigurationProperties {
 
-    protected ConsumerTwo consumerTwoInfo;
-    protected ConsumerOne consumerOneInfo;
+    protected ConsumerTwo consumerTwo;
+    protected ConsumerOne consumerOne;
     protected String keyDeserializer;
     protected String valueDeserializer;
     protected String bootstrapServers;

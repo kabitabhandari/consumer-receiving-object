@@ -50,19 +50,9 @@ public class KafkaConfiguration {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerTwoInfo.getGroupId());
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerOne.getGroupId());
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
-
-        config.put(JsonSerializer.TYPE_MAPPINGS, "user:com.example.consumerreceivingobject.User");
-        config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
-        config.put(JsonDeserializer.REMOVE_TYPE_INFO_HEADERS, false);
-
-
-        config.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
-        config.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, JsonDeserializer.class);
-
-
 
         return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
                 new JsonDeserializer<>(User.class));
