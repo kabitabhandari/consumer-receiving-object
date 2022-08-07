@@ -50,7 +50,7 @@ public class KafkaConfiguration {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.getGroupId());
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerTwoInfo.getGroupId());
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
 

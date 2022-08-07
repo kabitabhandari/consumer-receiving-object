@@ -13,9 +13,10 @@ public class KafkaConsumer {
     }
 
 
-    @KafkaListener(topics = "${spring.kafka.consumer.topic}", groupId = "${spring.kafka.consumer.group-id}",
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-two.topic}", groupId = "${spring.kafka.consumer.consumer-two.group-id}",
             containerFactory = "userKafkaListenerFactory")
     public void consumeJson(User user) {
         System.out.println("Consumed JSON Message: " + user);
     }
+
 }
