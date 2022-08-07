@@ -2,6 +2,7 @@ package com.example.consumerreceivingobject;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -18,6 +19,9 @@ import java.util.Map;
 @EnableKafka
 @Configuration
 public class KafkaConfiguration {
+
+    @Autowired
+    protected ConsumerConfigurationProperties consumerConfigurationProperties;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -45,10 +49,10 @@ public class KafkaConfiguration {
     public ConsumerFactory<String, User> userConsumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, "milktea_id");
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.getGroupId());
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
 
         config.put(JsonSerializer.TYPE_MAPPINGS, "user:com.example.consumerreceivingobject.User");
         config.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
