@@ -65,4 +65,24 @@ public class KafkaConfiguration {
         return factory;
     }
 
+    @Bean
+    public ConsumerFactory<String, User> employeeConsumerFactory() {
+        Map<String, Object> config = new HashMap<>();
+
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
+        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerTwo.getGroupId());
+        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
+
+        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
+                new JsonDeserializer<>(User.class));
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, User> employeeKafkaListenerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(employeeConsumerFactory());
+        return factory;
+    }
+
 }
