@@ -9,15 +9,8 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ConsumerClass {
 
-
-    @KafkaListener(topics = "blacktea")
-    public void consume(String message) {
-        System.out.println("Consumed message: " + message);
-    }
-
-
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-milktea.topic}")
-    public void consumeUserDetails(ConsumerRecord consumerRecord) {
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-milktea.topic}", containerFactory = "userKafkaListenerFactory")
+    public void consumeDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
                 consumerRecord.partition(),
@@ -25,12 +18,13 @@ public class ConsumerClass {
                 consumerRecord.value(),
                 consumerRecord.topic());
 
-        if(isValidRecord(consumerRecord)){
-        System.out.println("[Consumed Message]:: " + consumerRecord.value());}
+        if (isValidRecord(consumerRecord)) {
+            System.out.println("[Consumed Message]:: " + consumerRecord.value());
+        }
 
     }
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-greentea.topic}")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-greentea.topic}", containerFactory = "employeeKafkaListenerFactory")
     public void consumeEmployeeDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
@@ -39,16 +33,14 @@ public class ConsumerClass {
                 consumerRecord.value(),
                 consumerRecord.topic());
 
-        if(isValidRecord(consumerRecord)){
-        System.out.println("[Consumed Message]:: " + consumerRecord.value());}
+        if (isValidRecord(consumerRecord)) {
+            System.out.println("[Consumed Message]:: " + consumerRecord.value());
+        }
 
     }
 
     private boolean isValidRecord(ConsumerRecord consumerRecord) {
-        if(consumerRecord != null && consumerRecord.value() !=null ){
-            return true;
-        }
-        return false;
+        return consumerRecord != null && consumerRecord.value() != null;
     }
 
 }
