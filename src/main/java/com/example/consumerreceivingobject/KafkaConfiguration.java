@@ -40,7 +40,7 @@ public class KafkaConfiguration {
                 new JsonDeserializer<>(User.class));
     }
 
-    @Bean
+    @Bean("beanMilk")
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, User>> userKafkaListenerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(userConsumerFactory());
@@ -60,7 +60,7 @@ public class KafkaConfiguration {
                 new JsonDeserializer<>(Employee.class));
     }
 
-    @Bean
+    @Bean("beanGreen")
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, Employee>> employeeKafkaListenerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Employee> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(employeeConsumerFactory());

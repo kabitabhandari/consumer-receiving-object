@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ConsumerClass {
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-milktea.topic}", containerFactory = "userKafkaListenerFactory")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-milktea.topic}", containerFactory = "beanMilk")
     public void consumeDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
@@ -24,7 +24,7 @@ public class ConsumerClass {
 
     }
 
-    @KafkaListener(topics = "${spring.kafka.consumer.consumer-greentea.topic}", containerFactory = "employeeKafkaListenerFactory")
+    @KafkaListener(topics = "${spring.kafka.consumer.consumer-greentea.topic}", containerFactory = "beanGreen")
     public void consumeEmployeeDetails(ConsumerRecord consumerRecord) {
         log.info("Received message with key={}, partition={}, offset={} and value={} on topic={}",
                 consumerRecord.key(),
