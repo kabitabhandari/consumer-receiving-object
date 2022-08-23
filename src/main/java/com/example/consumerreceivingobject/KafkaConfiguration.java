@@ -2,6 +2,7 @@ package com.example.consumerreceivingobject;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -10,17 +11,33 @@ import org.springframework.kafka.config.KafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
+import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
+
+/*
+Springboot provides an auto configuration for Kafka via KafkaAutoConfiguration class.
+When you use @EnableAutoConfiguration or @SpringBootApplication, Spring boot automatically configures Kafka for you.
+If you don't use Springboot, then you would have to use @EnableKafka to configure Kafka for your Spring app.
+ */
+
+
 
 @EnableKafka
 @Configuration
 public class KafkaConfiguration {
 
-    protected ConsumerConfigurationProperties consumerConfigurationProperties;
+    //e.g: https://stackoverflow.com/questions/48959141/is-there-a-code-sample-for-multiple-producers-in-spring-kafka
 
+    protected  ConsumerConfigurationProperties consumerConfigurationProperties;
+
+    @Autowired
     public KafkaConfiguration(ConsumerConfigurationProperties consumerConfigurationProperties) {
 
         this.consumerConfigurationProperties = consumerConfigurationProperties;
@@ -29,14 +46,20 @@ public class KafkaConfiguration {
 
     @Bean
     public ConsumerFactory<String, User> userConsumerFactory() {
-        Map<String, Object> config = new HashMap<>();
+        Map<String, Object> consumerProperties = new HashMap<>();
 
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerMilktea.getGroupId());
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
+        consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
+        consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerMilktea.getGroupId());
 
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
+        consumerProperties.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+        consumerProperties.put(KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+
+        consumerProperties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, consumerConfigurationProperties.getKeyDeserializer());
+        consumerProperties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, consumerConfigurationProperties.getValueDeserializer());
+
+        consumerProperties.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, "false");
+
+        return new DefaultKafkaConsumerFactory<>(consumerProperties, new StringDeserializer(),
                 new JsonDeserializer<>(User.class));
     }
 
@@ -49,14 +72,20 @@ public class KafkaConfiguration {
 
     @Bean
     public ConsumerFactory<String, Employee> employeeConsumerFactory() {
-        Map<String, Object> config = new HashMap<>();
+        Map<String, Object> consumerProperties = new HashMap<>();
 
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
-        config.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerGreentea.getGroupId());
-        config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getKeyDeserializer());
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, consumerConfigurationProperties.getValueDeserializer());
+        consumerProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, consumerConfigurationProperties.getBootstrapServers());
+        consumerProperties.put(ConsumerConfig.GROUP_ID_CONFIG, consumerConfigurationProperties.consumerGreentea.getGroupId());
 
-        return new DefaultKafkaConsumerFactory<>(config, new StringDeserializer(),
+        consumerProperties.put(KEY_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+        consumerProperties.put(VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+
+        consumerProperties.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, consumerConfigurationProperties.getKeyDeserializer());
+        consumerProperties.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, consumerConfigurationProperties.getValueDeserializer());
+
+        consumerProperties.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, "false");
+
+        return new DefaultKafkaConsumerFactory<>(consumerProperties, new StringDeserializer(),
                 new JsonDeserializer<>(Employee.class));
     }
 
